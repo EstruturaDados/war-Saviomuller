@@ -31,28 +31,25 @@
 
 // --- Função Principal (main) ---
 // Função principal que orquestra o fluxo do jogo, chamando as outras funções em ordem.
-int main() {
-    // 1. Configuração Inicial (Setup):
-    // - Define o locale para português.
-    // - Inicializa a semente para geração de números aleatórios com base no tempo atual.
-    // - Aloca a memória para o mapa do mundo e verifica se a alocação foi bem-sucedida.
-    // - Preenche os territórios com seus dados iniciais (tropas, donos, etc.).
-    // - Define a cor do jogador e sorteia sua missão secreta.
 
-    // 2. Laço Principal do Jogo (Game Loop):
-    // - Roda em um loop 'do-while' que continua até o jogador sair (opção 0) ou vencer.
-    // - A cada iteração, exibe o mapa, a missão e o menu de ações.
-    // - Lê a escolha do jogador e usa um 'switch' para chamar a função apropriada:
-    //   - Opção 1: Inicia a fase de ataque.
-    //   - Opção 2: Verifica se a condição de vitória foi alcançada e informa o jogador.
-    //   - Opção 0: Encerra o jogo.
-    // - Pausa a execução para que o jogador possa ler os resultados antes da próxima rodada.
+// 1. Configuração Inicial (Setup):
+// - Define o locale para português.
+// - Inicializa a semente para geração de números aleatórios com base no tempo atual.
+// - Aloca a memória para o mapa do mundo e verifica se a alocação foi bem-sucedida.
+// - Preenche os territórios com seus dados iniciais (tropas, donos, etc.).
+// - Define a cor do jogador e sorteia sua missão secreta.
 
-    // 3. Limpeza:
-    // - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
+// 2. Laço Principal do Jogo (Game Loop):
+// - Roda em um loop 'do-while' que continua até o jogador sair (opção 0) ou vencer.
+// - A cada iteração, exibe o mapa, a missão e o menu de ações.
+// - Lê a escolha do jogador e usa um 'switch' para chamar a função apropriada:
+//   - Opção 1: Inicia a fase de ataque.
+//   - Opção 2: Verifica se a condição de vitória foi alcançada e informa o jogador.
+//   - Opção 0: Encerra o jogo.
+// - Pausa a execução para que o jogador possa ler os resultados antes da próxima rodada.
 
-    return 0;
-}
+// 3. Limpeza:
+// - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
 
 // --- Implementação das Funções ---
 
@@ -96,3 +93,71 @@ int main() {
 
 // limparBufferEntrada():
 // Função utilitária para limpar o buffer de entrada do teclado (stdin), evitando problemas com leituras consecutivas de scanf e getchar.
+
+
+// Blibliotecas
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> // Para strcspn()
+
+// Constantes Globais
+#define MAX_TERRITORIOS 5
+#define TAM_NOME 30
+#define TAM_COR 10
+
+// Definindo a Estrutura (Território)
+typedef struct {
+    char nome[TAM_NOME];
+    char cor[TAM_COR];
+    int tropas;
+} Territorio;
+
+// Função para limpar o buffer de entrada
+void limparBufferEntrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int main() {
+
+    Territorio territorio[MAX_TERRITORIOS];
+
+    printf("=======================================================\n");
+    printf("           WAR ESTRUTURADO - CADASTRO INICIAL          \n");
+    printf("=======================================================\n\n");
+    printf("Vamos cadastrar os 5 Territórios Iniciais do nosso mundo...\n\n");
+
+    // Cadastro dos Territórios
+    for (int i = 0; i < MAX_TERRITORIOS; i++) {
+        printf("--- Cadastrando Territorio %d --- \n", i + 1);
+
+        printf("Digite o nome do Território: ");
+        fgets(territorio[i].nome, TAM_NOME, stdin);
+        territorio[i].nome[strcspn(territorio[i].nome, "\n")] = '\0'; // Remove o '\n'
+
+        printf("Digite a cor do Exército: ");
+        fgets(territorio[i].cor, TAM_COR, stdin);
+        territorio[i].cor[strcspn(territorio[i].cor, "\n")] = '\0'; // Remove o '\n'
+
+        printf("Digite o número de tropas: ");
+        scanf("%d", &territorio[i].tropas);
+        
+        printf("\n");
+
+        limparBufferEntrada();
+    }
+
+    // Exibição dos dados cadastrados    
+    printf("==================================\n");
+    printf("   MAPA DO MUNDO - ESTADO ATUAL   \n");
+    printf("==================================\n\n");
+
+    for (int i = 0; i < MAX_TERRITORIOS; i++) {
+        printf("Territorio %d:\n", i + 1);
+        printf(" - Nome: %s\n", territorio[i].nome);
+        printf(" - Cor: %s\n", territorio[i].cor);
+        printf(" - Número de tropas: %d\n\n", territorio[i].tropas);
+    }
+
+   return 0;
+}
